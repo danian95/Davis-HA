@@ -1,0 +1,563 @@
+# xweather API
+rest:
+  - resource: https://data.api.xweather.com/batch/ZIPCODE
+    scan_interval: 3600
+    params:
+      client_id: !secret xweather_client
+      client_secret: !secret xweather_secret
+      plimit: 14
+      fields: periods.dateTimeISO,periods.maxTempF,periods.minTempF,periods.feelslikeF,periods.dewpointF,periods.humidity,periods.pop,periods.pressureIN,periods.precipIN,periods.uvi,periods.windDirDEG,periods.windGustMPH,periods.windSpeedMPH,periods.tempF,periods.icon,periods.weather
+      requests: /forecasts%3Ffilter=day,/forecasts%3Ffilter=1hr
+    sensor:
+       - name: "XWeather Day"
+         unique_id: xweatherday
+         value_template: "{{ value_json.response.responses[0].response[0].periods[0].dateTimeISO }}"
+         json_attributes_path: "$.response.responses[0].response[0]"
+         json_attributes: 
+            - periods
+       - name: "XWeather Hourly"
+         unique_id: xweatherhour
+         value_template: "{{ value_json.response.responses[1].response[0].periods[0].dateTimeISO }}"
+         json_attributes_path: "$.response.responses[1].response[0]"
+         json_attributes: 
+            - periods
+
+frontend:
+  themes:
+    xweather:
+     weather-icon-clear-night: url("/local/xweather-icon/clearn.png")
+     weather-icon-lightning: url("/local/xweather-icon/tstorm.png")
+     weather-icon-lightning-rainy: url("/local/xweather-icon/tstorm.png")
+     weather-icon-partlycloudy: url("/local/xweather-icon/pcloudy.png")
+     weather-icon-pouring: url("/local/xweather-icon/rain.png")
+     weather-icon-rainy: url("/local/xweather-icon/showers.png")
+     weather-icon-hail: url("/local/xweather-icon/freezingrain.png")
+     weather-icon-snowy: url("/local/xweather-icon/snow.png")
+     weather-icon-snowy-rainy: url("/local/xweather-icon/rainandsnow.png")
+     weather-icon-windy: url("/local/xweather-icon/wind.png")
+#     weather-icon-windy-variant
+#     weather-icon-exceptional
+     weather-icon-am_pcloudy: url("/local/xweather-icon/am_pcloudy.png")
+     weather-icon-am_pcloudyr: url("/local/xweather-icon/am_pcloudyr.png")
+     weather-icon-am_showers: url("/local/xweather-icon/am_showers.png")
+     weather-icon-am_snowshowers: url("/local/xweather-icon/am_snowshowers.png")
+     weather-icon-am_tstorm: url("/local/xweather-icon/am_tstorm.png")
+     weather-icon-blizzard: url("/local/xweather-icon/blizzard.png")
+     weather-icon-blizzardn: url("/local/xweather-icon/blizzardn.png")
+     weather-icon-blowingsnow: url("/local/xweather-icon/blowingsnow.png")
+     weather-icon-blowingsnown: url("/local/xweather-icon/blowingsnown.png")
+     weather-icon-chancetstorm: url("/local/xweather-icon/chancetstorm.png")
+     weather-icon-chancetstormn: url("/local/xweather-icon/chancetstormn.png")
+     weather-icon-clear: url("/local/xweather-icon/clear.png")
+     weather-icon-clearn: url("/local/xweather-icon/clearn.png")
+     weather-icon-clearw: url("/local/xweather-icon/clearw.png")
+     weather-icon-clearwn: url("/local/xweather-icon/clearwn.png")
+     weather-icon-cloudy: url("/local/xweather-icon/cloudy.png")
+     weather-icon-cloudyn: url("/local/xweather-icon/cloudyn.png")
+     weather-icon-cloudyw: url("/local/xweather-icon/cloudyw.png")
+     weather-icon-cloudywn: url("/local/xweather-icon/cloudywn.png")
+     weather-icon-drizzle: url("/local/xweather-icon/drizzle.png")
+     weather-icon-drizzlef: url("/local/xweather-icon/drizzlef.png")
+     weather-icon-drizzlen: url("/local/xweather-icon/drizzlen.png")
+     weather-icon-dust: url("/local/xweather-icon/dust.png")
+     weather-icon-fair: url("/local/xweather-icon/fair.png")
+     weather-icon-fairn: url("/local/xweather-icon/fairn.png")
+     weather-icon-fairw: url("/local/xweather-icon/fairw.png")
+     weather-icon-fairwn: url("/local/xweather-icon/fairwn.png")
+     weather-icon-fdrizzle: url("/local/xweather-icon/fdrizzle.png")
+     weather-icon-fdrizzlen: url("/local/xweather-icon/fdrizzlen.png")
+     weather-icon-flurries: url("/local/xweather-icon/flurries.png")
+     weather-icon-flurriesn: url("/local/xweather-icon/flurriesn.png")
+     weather-icon-flurriesw: url("/local/xweather-icon/flurriesw.png")
+     weather-icon-flurrieswn: url("/local/xweather-icon/flurrieswn.png")
+     weather-icon-fog: url("/local/xweather-icon/fog.png")
+     weather-icon-fogn: url("/local/xweather-icon/fogn.png")
+     weather-icon-freezingrain: url("/local/xweather-icon/freezingrain.png")
+     weather-icon-freezingrainn: url("/local/xweather-icon/freezingrainn.png")
+     weather-icon-hazy: url("/local/xweather-icon/hazy.png")
+     weather-icon-hazyn: url("/local/xweather-icon/hazyn.png")
+     weather-icon-mcloudy: url("/local/xweather-icon/mcloudy.png")
+     weather-icon-mcloudyn: url("/local/xweather-icon/mcloudyn.png")
+     weather-icon-mcloudyr: url("/local/xweather-icon/mcloudyr.png")
+     weather-icon-mcloudyrn: url("/local/xweather-icon/mcloudyrn.png")
+     weather-icon-mcloudyrw: url("/local/xweather-icon/mcloudyrw.png")
+     weather-icon-mcloudyrwn: url("/local/xweather-icon/mcloudyrwn.png")
+     weather-icon-mcloudys: url("/local/xweather-icon/mcloudys.png")
+     weather-icon-mcloudysfn: url("/local/xweather-icon/mcloudysfn.png")
+     weather-icon-mcloudysfw: url("/local/xweather-icon/mcloudysfw.png")
+     weather-icon-mcloudysfwn: url("/local/xweather-icon/mcloudysfwn.png")
+     weather-icon-mcloudysn: url("/local/xweather-icon/mcloudysn.png")
+     weather-icon-mcloudysw: url("/local/xweather-icon/mcloudysw.png")
+     weather-icon-mcloudyswn: url("/local/xweather-icon/mcloudyswn.png")
+     weather-icon-mcloudyt: url("/local/xweather-icon/mcloudyt.png")
+     weather-icon-mcloudytn: url("/local/xweather-icon/mcloudytn.png")
+     weather-icon-mcloudytw: url("/local/xweather-icon/mcloudytw.png")
+     weather-icon-mcloudytwn: url("/local/xweather-icon/mcloudytwn.png")
+     weather-icon-mcloudyw: url("/local/xweather-icon/mcloudyw.png")
+     weather-icon-mcloudywn: url("/local/xweather-icon/mcloudywn.png")
+     weather-icon-na: url("/local/xweather-icon/na.png")
+     weather-icon-pcloudy: url("/local/xweather-icon/pcloudy.png")
+     weather-icon-pcloudyn: url("/local/xweather-icon/pcloudyn.png")
+     weather-icon-pcloudyr: url("/local/xweather-icon/pcloudyr.png")
+     weather-icon-pcloudyrn: url("/local/xweather-icon/pcloudyrn.png")
+     weather-icon-pcloudyrw: url("/local/xweather-icon/pcloudyrw.png")
+     weather-icon-pcloudyrwn: url("/local/xweather-icon/pcloudyrwn.png")
+     weather-icon-pcloudys: url("/local/xweather-icon/pcloudys.png")
+     weather-icon-pcloudysf: url("/local/xweather-icon/pcloudysf.png")
+     weather-icon-pcloudysfn: url("/local/xweather-icon/pcloudysfn.png")
+     weather-icon-pcloudysfw: url("/local/xweather-icon/pcloudysfw.png")
+     weather-icon-pcloudysfwn: url("/local/xweather-icon/pcloudysfwn.png")
+     weather-icon-pcloudysn: url("/local/xweather-icon/pcloudysn.png")
+     weather-icon-pcloudysw: url("/local/xweather-icon/pcloudysw.png")
+     weather-icon-pcloudyswn: url("/local/xweather-icon/pcloudyswn.png")
+     weather-icon-pcloudyt: url("/local/xweather-icon/pcloudyt.png")
+     weather-icon-pcloudytn: url("/local/xweather-icon/pcloudytn.png")
+     weather-icon-pcloudytw: url("/local/xweather-icon/pcloudytw.png")
+     weather-icon-pcloudytwn: url("/local/xweather-icon/pcloudytwn.png")
+     weather-icon-pcloudyw: url("/local/xweather-icon/pcloudyw.png")
+     weather-icon-pcloudywn: url("/local/xweather-icon/pcloudywn.png")
+     weather-icon-pm_pcloudy: url("/local/xweather-icon/pm_pcloudy.png")
+     weather-icon-pm_pcloudyr: url("/local/xweather-icon/pm_pcloudyr.png")
+     weather-icon-pm_showers: url("/local/xweather-icon/pm_showers.png")
+     weather-icon-pm_snowshowers: url("/local/xweather-icon/pm_snowshowers.png")
+     weather-icon-pm_tstorm: url("/local/xweather-icon/pm_tstorm.png")
+     weather-icon-rain: url("/local/xweather-icon/rain.png")
+     weather-icon-rainandsnow: url("/local/xweather-icon/rainandsnow.png")
+     weather-icon-rainandsnown: url("/local/xweather-icon/rainandsnown.png")
+     weather-icon-rainn: url("/local/xweather-icon/rainn.png")
+     weather-icon-raintosnow: url("/local/xweather-icon/raintosnow.png")
+     weather-icon-raintosnown: url("/local/xweather-icon/raintosnown.png")
+     weather-icon-rainw: url("/local/xweather-icon/rainw.png")
+     weather-icon-showers: url("/local/xweather-icon/showers.png")
+     weather-icon-showersn: url("/local/xweather-icon/showersn.png")
+     weather-icon-showersw: url("/local/xweather-icon/showersw.png")
+     weather-icon-sleet: url("/local/xweather-icon/sleet.png")
+     weather-icon-sleetn: url("/local/xweather-icon/sleetn.png")
+     weather-icon-sleetsnow: url("/local/xweather-icon/sleetsnow.png")
+     weather-icon-smoke: url("/local/xweather-icon/smoke.png")
+     weather-icon-smoken: url("/local/xweather-icon/smoken.png")
+     weather-icon-snow: url("/local/xweather-icon/snow.png")
+     weather-icon-snown: url("/local/xweather-icon/snown.png")
+     weather-icon-snowshowers: url("/local/xweather-icon/snowshowers.png")
+     weather-icon-snowshowersn: url("/local/xweather-icon/snowshowersn.png")
+     weather-icon-snowshowersw: url("/local/xweather-icon/snowshowersw.png")
+     weather-icon-snowshowerswn: url("/local/xweather-icon/snowshowerswn.png")
+     weather-icon-snowtorain: url("/local/xweather-icon/snowtorain.png")
+     weather-icon-snowtorainn: url("/local/xweather-icon/snowtorainn.png")
+     weather-icon-snoww: url("/local/xweather-icon/snoww.png")
+     weather-icon-snowwn: url("/local/xweather-icon/snowwn.png")
+     weather-icon-sunny: url("/local/xweather-icon/sunny.png")
+     weather-icon-sunnyn: url("/local/xweather-icon/sunnyn.png")
+     weather-icon-sunnyw: url("/local/xweather-icon/sunnyw.png")
+     weather-icon-sunnywn: url("/local/xweather-icon/sunnywn.png")
+     weather-icon-tstorm: url("/local/xweather-icon/tstorm.png")
+     weather-icon-tstormn: url("/local/xweather-icon/tstormn.png")
+     weather-icon-tstormsw: url("/local/xweather-icon/tstormsw.png")
+     weather-icon-tstormswn: url("/local/xweather-icon/tstormswn.png")
+     weather-icon-tstormw: url("/local/xweather-icon/tstormw.png")
+     weather-icon-tstormwn: url("/local/xweather-icon/tstormwn.png")
+     weather-icon-wind: url("/local/xweather-icon/wind.png")
+     weather-icon-wintrymix: url("/local/xweather-icon/wintrymix.png")
+     weather-icon-wintrymixn: url("/local/xweather-icon/wintrymixn.png")
+
+# Weather integration
+weather:
+  - platform: template
+    unique_id: weather.davis
+    name: "Wombat Villa"
+    condition_template: "{{ state_attr('sensor.davis_forecast', 'current') }}"
+    temperature_template: "{{ states('sensor.davis_outdoor_temperature') }}"
+    humidity_template: "{{ states('sensor.davis_outdoor_humidity') }}"
+    pressure_template: "{{ states('sensor.davis_barometer') }}"
+    wind_speed_template: "{{ states('sensor.davis_10_min_wind_speed') }}"
+    wind_bearing_template: "{{ states('sensor.davis_ordinal_wind_dir') }}"
+    dew_point_template: "{{ states('sensor.davis_dewpoint') }}"
+    apparent_temperature_template: "{{ states('sensor.davis_apparent_temperature') }}"
+    wind_gust_speed_template: "{{ states('sensor.davis_10_min_wind_gust') }}"
+    forecast_daily_template: >
+      [{%- for day in state_attr('sensor.xweather_day','periods') -%}
+        {"datetime": "{{ day['dateTimeISO'] }}",
+        "apparent_temperature": "{{ day['feelslikeF'] }}",
+        "condition": "{{ day['icon'].split('.')[0] }}",
+        "dew_point": "{{ day['dewpointF'] }}",
+        "humidity": "{{ day['humidity'] }}",
+        "precipitation_probability": "{{ day['pop'] }}",
+        "precipitation": "{{ day['precipIN'] }}",
+        "pressure": "{{ day['pressureIN'] }}",
+        "temperature": "{{ day['maxTempF'] }}",
+        "templow": "{{ day['minTempF'] }}",
+        "uv_index": "{{ day['uvi'] }}",
+        "wind_bearing": "{{ day['windDirDEG'] }}",
+        "wind_gust_speed": "{{ day['windGustMPH'] }}",
+        "wind_speed": "{{ day['windSpeedMPH'] }}"}
+        {%- if not loop.last  -%}
+         ,
+        {%- endif -%}
+       {%- endfor -%}]
+    forecast_hourly_template: >
+       [{%- for day in state_attr('sensor.xweather_hourly','periods') -%}
+        {"datetime": "{{ day['dateTimeISO'] }}",
+        "apparent_temperature": "{{ day['feelslikeF'] }}",
+        "condition": "{{ day['icon'].split('.')[0] }}",
+        "dew_point": "{{ day['dewpointF'] }}",
+        "humidity": "{{ day['humidity'] }}",
+        "precipitation_probability": "{{ day['pop'] }}",
+        "precipitation": "{{ day['precipIN'] }}",
+        "pressure": "{{ day['pressureIN'] }}",
+        "temperature": "{{ day['tempF'] }}",
+        "uv_index": "{{ day['uvi'] }}",
+        "wind_bearing": "{{ day['windDirDEG'] }}",
+        "wind_gust_speed": "{{ day['windGustMPH'] }}",
+        "wind_speed": "{{ day['windSpeedMPH'] }}"}
+        {%- if not loop.last  -%}
+         ,
+        {%- endif -%}
+       {%- endfor -%}]
+    attribution_template: "Weather provided by weewx, Davis Vantage Vue, and XWeather"
+
+template:
+  - sensors:
+#      xweather_day_forecast:
+#        friendly_name: "XWeather Daily Forecast"
+#        unique_id: sensor.xweather_daily_template
+#        value_template: "{{ states('sensor.xweather_day') }}"
+#	attribute_templates:
+#	  forecast: >
+      davis_ordinal_wind_dir:
+        friendly_name: "Ordinal Wind Direction"
+        unique_id: sensor.davis_ordinal_wind_direction
+        value_template: >
+          {% set direction = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW','N'] %}
+          {% set degree = states('sensor.davis_wind_direction')|float %}
+          {{ direction[((degree+11.25)/22.5)|int] }}
+        icon_template: mdi:compass
+      davis_ordinal_gust_direction:
+        friendly_name: "Ordinal 10 Min Gust Direction"
+        unique_id: sensor.davis_ordinal_gust_direction
+        value_template: >
+          {% set direction = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW','N'] %}
+          {% set degree = states('sensor.davis_10_min_wind_gust_direction')|float %}
+          {{ direction[((degree+11.25)/22.5)|int] }}
+        icon_template: mdi:compass
+      davis_barometer_trend:
+        friendly_name: "Barometer Trend"
+        unique_id: sensor.davis_barometer_trend
+        value_template: >
+          {% if is_state('sensor.davis_barometer_trend_icon', '-60') %}
+            Falling Rapidly
+          {% elif is_state('sensor.davis_barometer_trend_icon', '-20') %}
+            Falling Slowly
+          {% elif is_state('sensor.davis_barometer_trend_icon', '0') %}
+            Steady
+          {% elif is_state('sensor.davis_barometer_trend_icon', '20') %}
+            Rising Slowly
+          {% elif is_state('sensor.davis_barometer_trend_icon', '60') %}
+            Rising Rapidly
+          {% else %}
+            Unknown
+          {% endif %}
+        icon_template: >
+          {% if is_state('sensor.davis_barometer_trend_icon', '-60') %}
+            mdi:arrow-down-thick
+          {% elif is_state('sensor.davis_barometer_trend_icon', '-20') %}
+            mdi:arrow-bottom-right-thick
+          {% elif is_state('sensor.davis_barometer_trend_icon', '0') %}
+            mdi:arrow-right-thick
+          {% elif is_state('sensor.davis_barometer_trend_icon', '20') %}
+            mdi:arrow-top-right-thick
+          {% elif is_state('sensor.davis_barometer_trend_icon', '60') %}
+            mdi:arrow-up-thick
+          {% else %}
+            mdi:help
+          {% endif %}
+      davis_forecast:
+        friendly_name: "Current Conditions"
+        unique_id: sensor.davis_forecast
+        value_template: >
+          {% if states('sensor.davis_rain_rate') | float > 0 %}
+            Raining
+          {% elif is_state('sensor.davis_forecast_icon','8') %}
+            Mostly Clear
+          {% elif is_state('sensor.davis_forecast_icon','6') %}
+            Partly Cloudy
+          {% elif is_state('sensor.davis_forecast_icon','2') %}
+            Mostly Cloudy
+          {% elif is_state('sensor.davis_forecast_icon','3') %}
+            Mostly Cloudy, Rain within 12 hours
+          {% elif is_state('sensor.davis_forecast_icon','18') %}
+            Mostly Cloudy, Snow within 12 hours
+          {% elif is_state('sensor.davis_forecast_icon','11') %}
+            Mostly Cloudy, Rain or Snow within 12 hours
+          {% elif is_state('sensor.davis_forecast_icon','7') %}
+            Partly Cloudy, Rain within 12 hours
+          {% elif is_state('sensor.davis_forecast_icon','22') %}
+            Partly Cloudy, Snow within 12 hours
+          {% elif is_state('sensor.davis_forecast_icon','23') %}
+            Partly Cloudy, Rain or Snow within 12 hours
+          {% else %}
+            Unknown
+          {% endif %}
+        icon_template: >
+          {% if states('sensor.davis_rain_rate') | float > 0.2 %}
+            mdi:weather-pouring
+          {% elif states('sensor.davis_rain_rate') | float > 0 %}
+            mdi:weather-rainy
+          {% elif is_state('sensor.davis_forecast_icon','8') %}
+          {% if is_state('sun.sun', 'below_horizon') %}
+            mdi:weather-night
+          {% else %}
+            mdi:weather-sunny
+          {% endif %}
+          {% elif is_state('sensor.davis_forecast_icon','6') %}
+          {% if is_state('sun.sun', 'below_horizon') %}
+            mdi:weather-night-partly-cloudy
+          {% else %}
+            mdi:weather-partly-cloudy
+          {% endif %}
+          {% elif is_state('sensor.davis_forecast_icon','2') %}
+            mdi:weather-cloudy
+          {% elif is_state('sensor.davis_forecast_icon','3') %}
+            mdi:weather-rainy
+          {% elif is_state('sensor.davis_forecast_icon','18') %}
+            mdi:weather-snowy
+          {% elif is_state('sensor.davis_forecast_icon','19') %}
+            mdi:weather-snowy-rainy
+          {% elif is_state('sensor.davis_forecast_icon','7') %}
+            mdi:weather-partly-rainy
+          {% elif is_state('sensor.davis_forecast_icon','22') %}
+            mdi:weather-partly-snowy
+          {% elif is_state('sensor.davis_forecast_icon','23') %}
+            mdi:weather-partly-snowy-rainy
+          {% else %}
+          {% endif %}
+        attribute_templates:
+          current: >
+            {% if states('sensor.davis_rain_rate') | float > 0.2 %}
+               pouring
+            {% elif states('sensor.davis_rain_rate') | float > 0 %}
+               rainy
+            {% elif is_state('sensor.davis_forecast_icon','8') %}
+              {% if is_state('sun.sun', 'below_horizon') %}
+                clear-night
+              {% else %}
+                sunny
+              {% endif %}
+            {% elif is_state('sensor.davis_forecast_icon','6') %}
+              partlycloudy
+            {% elif is_state('sensor.davis_forecast_icon','2') %}
+              cloudy
+            {% elif is_state('sensor.davis_forecast_icon','3') %}
+              rainy
+            {% elif is_state('sensor.davis_forecast_icon','18') %}
+              snowy
+            {% elif is_state('sensor.davis_forecast_icon','19') %}
+              snowy-rainy
+            {% elif is_state('sensor.davis_forecast_icon','7') %}
+              rainy
+            {% elif is_state('sensor.davis_forecast_icon','22') %}
+              snowy
+            {% elif is_state('sensor.davis_forecast_icon','23') %}
+              snowy-rainy
+            {% else %}
+            {% endif %}
+          long: >
+            {% set forecast = [
+              "Mostly clear and cooler.",
+              "Mostly clear with little temperature change.",
+              "Mostly clear for 12 hours with little temperature change.",
+              "Mostly clear for 12 to 24 hours and cooler.",
+              "Mostly clear with little temperature change.",
+              "Partly cloudy and cooler.",
+              "Partly cloudy with little temperature change.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear and warmer.",
+              "Partly cloudy with little temperature change.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and warmer. Precipitation possible within 24 to 48 hours.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds with little temperature change. Precipitation possible within 24 hours.",
+              "Mostly clear with little temperature change.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds with little temperature change. Precipitation possible within 12 hours.",
+              "Mostly clear with little temperature change.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and warmer. Precipitation possible within 24 hours.",
+              "Mostly clear and warmer. Increasing winds.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and warmer. Precipitation possible within 12 hours. Increasing winds.",
+              "Mostly clear and warmer. Increasing winds.",
+              "Increasing clouds and warmer.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and warmer. Precipitation possible within 12 hours. Increasing winds.",
+              "Mostly clear and warmer. Increasing winds.",
+              "Increasing clouds and warmer.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and warmer. Precipitation possible within 12 hours. Increasing winds.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Mostly clear and warmer. Precipitation possible within 48 hours.",
+              "Mostly clear and warmer.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds with little temperature change. Precipitation possible within 24 to 48 hours.",
+              "Increasing clouds with little temperature change.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and warmer. Precipitation possible within 12 to 24 hours.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and warmer. Precipitation possible within 12 to 24 hours. Windy.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and warmer. Precipitation possible within 12 to 24 hours. Windy.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and warmer. Precipitation possible within 6 to 12 hours.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and warmer. Precipitation possible within 6 to 12 hours. Windy.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and warmer. Precipitation possible within 12 to 24 hours. Windy.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and warmer. Precipitation possible within 12 hours.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and warmer. Precipitation likley.",
+              "Clearing and cooler. Precipitation ending within 6 hours.",
+              "Partly cloudy with little temperature change.",
+              "Clearing and cooler. Precipitation ending within 6 hours.",
+              "Mostly clear with little temperature change.",
+              "Clearing and cooler. Precipitation ending within 6 hours.",
+              "Partly cloudy and cooler.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear and cooler.",
+              "Clearing and cooler. Precipitation ending within 6 hours.",
+              "Mostly clear with little temperature change.",
+              "Clearing and cooler. Precipitation ending within 6 hours.",
+              "Mostly clear and cooler.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds with little temperature change. Precipitation possible within 24 hours.",
+              "Mostly cloudy and cooler. Precipitation continuing.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Mostly cloudy and cooler. Precipitation likely.",
+              "Mostly cloudy with little temperature change. Precipitation continuing.",
+              "Mostly cloudy with little temperature change. Precipitation likely.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and cooler. Precipitation possible and windy within 6 hours.",
+              "Increasing clouds with little temperature change. Precipitation possible and windy within 6 hours.",
+              "Mostly cloudy and cooler. Precipitation continuing. Increasing winds.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Mostly cloudy and cooler. Precipitation likely. Increasing winds.",
+              "Mostly cloudy with little temperature change. Precipitation continuing. Increasing winds.",
+              "Mostly cloudy with little temperature change. Precipitation likely. Increasing winds.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and cooler. Precipitation possible within 12 to 24 hours possible wind shift to the W NW or N.",
+              "Increasing clouds with little temperature change. Precipitation possible within 12 to 24 hours possible wind shift to the W NW or N.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and cooler. Precipitation possible within 6 hours possible wind shift to the W NW or N.",
+              "Increasing clouds with little temperature change. Precipitation possible within 6 hours possible wind shift to the W NW or N.",
+              "Mostly cloudy and cooler. Precipitation ending within 12 hours possible wind shift to the W NW or N.",
+              "Mostly cloudy and cooler. Possible wind shift to the W NW or N.",
+              "Mostly cloudy with little temperature change. Precipitation ending within 12 hours possible wind shift to the W NW or N.",
+              "Mostly cloudy with little temperature change. Possible wind shift to the W NW or N.",
+              "Mostly cloudy and cooler. Precipitation ending within 12 hours possible wind shift to the W NW or N.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Mostly cloudy and cooler. Precipitation possible within 24 hours possible wind shift to the W NW or N.",
+              "Mostly cloudy with little temperature change. Precipitation ending within 12 hours possible wind shift to the W NW or N.",
+              "Mostly cloudy with little temperature change. Precipitation possible within 24 hours possible wind shift to the W NW or N.",
+              "Clearing cooler and windy. Precipitation ending within 6 hours.",
+              "Clearing cooler and windy.",
+              "Mostly cloudy and cooler. Precipitation ending within 6 hours. Windy with possible wind shift to the W NW or N.",
+              "Mostly cloudy and cooler. Windy with possible wind shift to the W NW or N.",
+              "Clearing cooler and windy.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Mostly cloudy with little temperature change. Precipitation possible within 12 hours. Windy.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and cooler. Precipitation possible within 12 hours possibly heavy at times. Windy.",
+              "Mostly cloudy and cooler. Precipitation ending within 6 hours. Windy.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Mostly cloudy and cooler. Precipitation possible within 12 hours. Windy.",
+              "Mostly cloudy and cooler. Precipitation ending in 12 to 24 hours.",
+              "Mostly cloudy and cooler.",
+              "Mostly cloudy and cooler. Precipitation continuing possible heavy at times. Windy.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Mostly cloudy and cooler. Precipitation possible within 6 to 12 hours. Windy.",
+              "Mostly cloudy with little temperature change. Precipitation continuing possibly heavy at times. Windy.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Mostly cloudy with little temperature change. Precipitation possible within 6 to 12 hours. Windy.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds with little temperature change. Precipitation possible within 12 hours possibly heavy at times. Windy.",
+              "Mostly cloudy and cooler. Windy.",
+              "Mostly cloudy and cooler. Precipitation continuing possibly heavy at times. Windy.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Mostly cloudy and cooler. Precipitation likely possibly heavy at times. Windy.",
+              "Mostly cloudy with little temperature change. Precipitation continuing possibly heavy at times. Windy.",
+              "Mostly cloudy with little temperature change. Precipitation likely possibly heavy at times. Windy.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and cooler. Precipitation possible within 6 hours. Windy.",
+              "Increasing clouds with little temperature change. Precipitation possible within 6 hours. Windy",
+              "Increasing clouds and cooler. Precipitation continuing. Windy with possible wind shift to the W NW or N.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Mostly cloudy and cooler. Precipitation likely. Windy with possible wind shift to the W NW or N.",
+              "Mostly cloudy with little temperature change. Precipitation continuing. Windy with possible wind shift to the W NW or N.",
+              "Mostly cloudy with little temperature change. Precipitation likely. Windy with possible wind shift to the W NW or N.",
+              "Increasing clouds and cooler. Precipitation possible within 6 hours. Windy with possible wind shift to the W NW or N.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and cooler. Precipitation possible within 6 hours possible wind shift to the W NW or N.",
+              "Increasing clouds with little temperature change. Precipitation possible within 6 hours. Windy with possible wind shift to the W NW or N.",
+              "Increasing clouds with little temperature change. Precipitation possible within 6 hours possible wind shift to the W NW or N.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and cooler. Precipitation possible within 6 hours. Windy with possible wind shift to the W NW or N.",
+              "Increasing clouds with little temperature change. Precipitation possible within 6 hours. Windy with possible wind shift to the W NW or N.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Increasing clouds and cooler. Precipitation possible within 12 to 24 hours. Windy with possible wind shift to the W NW or N.",
+              "Increasing clouds with little temperature change. Precipitation possible within 12 to 24 hours. Windy with possible wind shift to the W NW or N.",
+              "Mostly cloudy and cooler. Precipitation possibly heavy at times and ending within 12 hours. Windy with possible wind shift to the W NW or N.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Mostly cloudy and cooler. Precipitation possible within 6 to 12 hours possibly heavy at times. Windy with possible wind shift to the W NW or N.",
+              "Mostly cloudy with little temperature change. Precipitation ending within 12 hours. Windy with possible wind shift to the W NW or N.",
+              "Mostly cloudy with little temperature change. Precipitation possible within 6 to 12 hours possibly heavy at times. Windy with possible wind shift to the W NW or N.",
+              "Mostly cloudy and cooler. Precipitation continuing.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Mostly cloudy and cooler. Precipitation likely. Windy with possible wind shift to the W NW or N.",
+              "Mostly cloudy with little temperature change. Precipitation continuing.",
+              "Mostly cloudy with little temperature change. Precipitation likely.",
+              "Partly cloudy with little temperature change.",
+              "Mostly clear with little temperature change.",
+              "Mostly cloudy and cooler. Precipitation possible within 12 hours possibly heavy at times. Windy.",
+              "FORECAST REQUIRES 3 HOURS OF RECENT DATA",
+              "Mostly clear and cooler.",
+              "Mostly clear and cooler.",
+              "Mostly clear and cooler."
+            ] %}
+            {{ forecast[states('sensor.davis_forecast_rule') | int] }}

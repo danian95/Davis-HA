@@ -1,0 +1,1 @@
+SUBSYSTEMS=="usb", KERNEL=="ttyUSB*", ATTRS{idProduct}=="ea60", ATTRS{idVendor}=="10c4", SYMLINK+="davis", MODE="0666", GROUP="dialout"
